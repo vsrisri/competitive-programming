@@ -1,4 +1,3 @@
-// Incomplete
 import java.io.*;
 import java.util.*;
 
@@ -10,33 +9,35 @@ public class ABA12C {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int n = Integer.parseInt(st.nextToken());
             int k = Integer.parseInt(st.nextToken());
-            int[] price = new int[k + 1];
-            int[][] dp = new int[k + 1][n + 1];
-            int ans = Integer.MAX_VALUE;
-            dp[0][0] = 0;
             st = new StringTokenizer(br.readLine());
-            for (int i = 1; i <= k; i++) {
-                price[i] = Integer.parseInt(st.nextToken());
+            int[] cost = new int[k];
+            int max = 1000000000;
+            int[][] dp = new int[n + 1][k + 1];
+            int ans = max;
+            for (int i = 0; i < k; i++) {
+                cost[i] = Integer.parseInt(st.nextToken());
+            }
+            for (int i = 0; i <= n; i++) {
+                Arrays.fill(dp[i], max);
+            }
+            for (int i = 0; i <= n; i++) {
+                dp[i][0] = 0;
             }
 
-            for (int i = 0; i <= k; i++) {
-                Arrays.fill(dp[i], Integer.MAX_VALUE / 2);
-            }
-
-            for (int i = 1; i <= k; i++) {
-                for (int j = 1; j <= n; j++) {
-                    for (int p = 1; p <= k; p++) {
-                        if (price[p] != -1 && i - p >= 0) {
-                            dp[i][j] = Math.min(dp[i][j], dp[i - p][j - 1] + price[p]);
+            dp[0][0] = 0;
+            for (int fIdx = 1; fIdx <= n; fIdx++) {
+                for (int wIdx = 1; wIdx <= k; wIdx++) {
+                    for (int w = 1; w <= k; w++) {
+                        if (cost[w - 1] != -1 && wIdx - w >= 0) {
+                            dp[fIdx][wIdx] = Math.min(dp[fIdx][wIdx], dp[fIdx - 1][wIdx - w] + cost[w - 1]);
                         }
                     }
                 }
             }
-            for (int j = 1; j <= n; j++) {
-                ans = Math.min(ans, dp[k][j]);
+            for (int fIdx = 1; fIdx <= n; fIdx++) {
+                ans = Math.min(ans, dp[fIdx][k]);
             }
-
-            System.out.println(ans >= Integer.MAX_VALUE / 2 ? -1 : ans);
+            System.out.println(ans == max ? -1 : ans);
         }
         br.close();
     }
