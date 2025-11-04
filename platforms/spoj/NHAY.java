@@ -1,47 +1,73 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class NHAY {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder out = new StringBuilder();
-        String line;
-        boolean isf = true;
-        while ((line = br.readLine()) != null) {
-            if (line.isEmpty()) {
-                continue;
+        String lenStr;
+        boolean first = true;
+        while ((lenStr = br.readLine()) != null) {
+            lenStr = lenStr.trim();
+            if (lenStr.isEmpty()) {
+                break;
             }
-            int m = Integer.parseInt(line);
+            int needleLen = Integer.parseInt(lenStr);
             String needle = br.readLine();
-            String stack = br.readLine();
-            if (!isf) {
-                out.append("\n");
+            String haystack = br.readLine();
+            List<Integer> ans = kmpHelper(haystack, needle);
+            if (!first) {
+                System.out.println();
             }
-            isf = false;
-            List<Integer> positions = helper(needle, stack);
-            for (int pos : positions) {
-                out.append(pos).append("\n");
+            first = false;
+            for (int idx : ans) {
+                System.out.println(idx);
             }
         }
-        System.out.print(out.toString());
+        br.close();
     }
 
-    public static List<Integer> helper(String needle, String stack) {
-        List<Integer> ans = new ArrayList<>();
-        int n = stack.length();
-        int m = needle.length();
-        for (int i = 0; i <= n - m; i++) {
-            int j = 0;
-            for (; j < m; j++) {
-                if (stack.charAt(i + j) != needle.charAt(j)) {
-                    break;
+    public static List<Integer> kmpHelper(String haystack, String needle) {
+        List<Integer> posArr = new ArrayList<>();
+        int[] lps = helper(needle);
+        int i = 0, j = 0;
+        while (i < haystack.length()) {
+            if (needle.charAt(j) == haystack.charAt(i)) {
+                i++;
+                j++;
+            }
+            if (j == needle.length()) {
+                posArr.add(i - j);
+                j = lps[j - 1];
+            } else if (i < haystack.length() && needle.charAt(j) != haystack.charAt(i)) {
+                if (j != 0) {
+                    j = lps[j - 1];
+                } else {
+                    i++;
                 }
             }
-            if (j == m) {
-                ans.add(i);
+        }
+        return posArr;
+    }
+
+    public static int[] helper(String needle) {
+        int[] lps = new int[needle.length()];
+        int length = 0;
+        int i = 1;
+        while (i < needle.length()) {
+            if (needle.charAt(i) == needle.charAt(length)) {
+                length++;
+                lps[i] = length;
+                i++;
+            } else {
+                if (length != 0) {
+                    length = lps[length - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
             }
         }
-        return ans;
+        return lps;
     }
 }
 
