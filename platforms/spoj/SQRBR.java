@@ -1,53 +1,43 @@
-// Incomplete 
 import java.io.*;
 import java.util.*;
 
 public class SQRBR {
-    public static boolean[] fixed;
-    public static long[][] dp;
-    public static int n;
-
-    public static long helper(int pos, int open) {
-        long ans = 0;
-        if (open < 0) {
-            return 0;
-        }
-        if (pos == 2 * n) {
-            return open == 0 ? 1 : 0;
-        }
-        if (dp[pos][open] != -1) {
-            return dp[pos][open];
-        }
-        if (fixed[pos]) {
-            ans = helper(pos + 1, open + 1);
-        } else {
-            ans += helper(pos + 1, open + 1);
-            if (open > 0) {
-                ans += helper(pos + 1, open - 1);
-            }
-        }
-        return dp[pos][open] = ans;
-    }
-
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        int D = Integer.parseInt(br.readLine());
-        for (int tc = 0; tc < D; tc++) {
+        int d = Integer.parseInt(br.readLine().trim());
+        for (int tc = 0; tc < d; tc++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            n = Integer.parseInt(st.nextToken());
+            int n = Integer.parseInt(st.nextToken());
             int k = Integer.parseInt(st.nextToken());
-            fixed = new boolean[2 * n];
-            Arrays.fill(fixed, false);
+            boolean[] fixed = new boolean[2 * n + 1];
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < k; i++) {
-                fixed[Integer.parseInt(st.nextToken()) - 1] = true;
+                fixed[Integer.parseInt(st.nextToken())] = true;
             }
-            dp = new long[2 * n + 1][n + 1];
-            for (long[] row : dp) {
-                Arrays.fill(row, -1);
+            long[][] dp = new long[2 * n + 1][n + 1];
+            if (fixed[1]) {
+                dp[1][1] = 1;
+            } else {
+                dp[1][1] = 1;
             }
-            sb.append(helper(0, 0)).append('\n');
+            for (int i = 2; i <= 2 * n; i++) {
+                for (int j = 0; j <= n; j++) {
+                    if (fixed[i]) {
+                        if (j > 0) {
+                            dp[i][j] = dp[i - 1][j - 1];
+                        }
+                    } else {
+                        if (j > 0) {
+                            dp[i][j] += dp[i - 1][j - 1];
+                        }
+                        if (j + 1 <= n) {
+                            dp[i][j] += dp[i - 1][j + 1];
+                        }
+                    }
+                }
+            }
+            sb.append(dp[2 * n][0]).append('\n');
         }
         System.out.print(sb);
         br.close();
