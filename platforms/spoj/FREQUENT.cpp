@@ -1,4 +1,3 @@
-// Incomplete
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -24,13 +23,13 @@ Node merge(Node a, Node b) {
     if (b.leftVal == -1) {
         return a;
     }
-    
+
     int lv = a.leftVal;
     int rv = b.rightVal;
     int lf = a.leftFreq;
     int rf = b.rightFreq;
     int mf = max(a.maxFreq, b.maxFreq);
-    
+
     if (a.rightVal == b.leftVal) {
         int mid = a.rightFreq + b.leftFreq;
         mf = max(mf, mid);
@@ -84,22 +83,19 @@ Node query(int idx, int l, int r, int ql, int qr) {
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
-    string line;
-    while (getline(cin, line)) {
-        if (line == "0") {
+    while (true) {
+        cin >> n;
+        if (n == 0) {
             break;
         }
-        
-        stringstream ss(line);
-        ss >> n;
+
         int q;
-        ss >> q;
+        cin >> q;
         arr.assign(n + 1, 0);
         for (int i = 1; i <= n; ++i) {
             cin >> arr[i];
         }
-        
+
         int size = 4 * n;
         leftVal.assign(size, 0);
         rightVal.assign(size, 0);
@@ -107,7 +103,6 @@ int main() {
         rightFreq.assign(size, 0);
         maxFreq.assign(size, 0);
         build(1, 1, n);
-        
         for (int i = 0; i < q; ++i) {
             int l, r;
             cin >> l >> r;

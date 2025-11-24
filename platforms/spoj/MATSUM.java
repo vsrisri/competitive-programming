@@ -4,16 +4,16 @@ import java.util.*;
 
 public class MATSUM {
     public static int N;
-    public static int[][] bit;
-    public static int[][] arr;
-    public static void main(String[] args) throws Exception {
+    public static int[] bit;
+    public static int[] arr;
+    public static void main(String[] args) throws Exception { 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder out = new StringBuilder();
         int t = Integer.parseInt(br.readLine());
         for (int tc = 0; tc < t; tc++) {
             N = Integer.parseInt(br.readLine());
-            bit = new int[N + 1][N + 1];
-            arr = new int[N][N];
+            bit = new int[(N) * (N)];
+            arr = new int[(N) * (N)];
             while (true) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
                 String comm = st.nextToken();
@@ -25,8 +25,9 @@ public class MATSUM {
                     int x = Integer.parseInt(st.nextToken());
                     int y = Integer.parseInt(st.nextToken());
                     int v = Integer.parseInt(st.nextToken());
-                    int diff = v - arr[x][y];
-                    arr[x][y] = v;
+                    int idx = x * N + y;
+                    int diff = v - arr[idx];
+                    arr[idx] = v;
                     update(x + 1, y + 1, diff);
                 } else {
                     int x1 = Integer.parseInt(st.nextToken());
@@ -41,13 +42,18 @@ public class MATSUM {
         System.out.print(out.toString());
         br.close();
     }
-    
+
+    public static int getIdx(int x, int y) {
+        return (x - 1) * N + (y - 1);
+    }
+
     public static void update(int x, int y, int val) {
         int dx = x;
         while (dx <= N) {
             int dy = y;
             while (dy <= N) {
-                bit[dx][dy] += val;
+                int index = (dx - 1) * N + (dy - 1);
+                bit[index] += val;
                 dy += dy & -dy;
             }
             dx += dx & -dx;
@@ -60,7 +66,8 @@ public class MATSUM {
         while (dx > 0) {
             int dy = y;
             while (dy > 0) {
-                sum += bit[dx][dy];
+                int index = (dx - 1) * N + (dy - 1);
+                sum += bit[index];
                 dy -= dy & -dy;
             }
             dx -= dx & -dx;
@@ -72,3 +79,4 @@ public class MATSUM {
         return query(x2, y2) - query(x1 - 1, y2) - query(x2, y1 - 1) + query(x1 - 1, y1 - 1);
     }
 }
+
