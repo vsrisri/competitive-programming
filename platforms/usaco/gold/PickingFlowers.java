@@ -1,4 +1,3 @@
-// Works on 11/23 test cases
 import java.util.*;
 import java.io.*;
 
@@ -10,7 +9,7 @@ public class PickingFlowers {
         if (level[node] == lim) {
             if (!isFlower[node]) {
                 state[node] = 1;
-                return true;
+                return false;
             } else {
                 state[node] = 0;
                 return true;
@@ -170,7 +169,7 @@ public class PickingFlowers {
             }
 
             for (int i = 1; i < n; i++) {
-                sb.append(state[i] == 1 ? '0' : '1');
+                sb.append(state[i] == 0 ? '1' : '0');
             }
             sb.append('\n');
         }
