@@ -38,8 +38,8 @@ public class Supervision {
                 int res = i;
                 while (lo <= hi) {
                     int mid = (lo + hi) / 2;
-                    if ((long) {
-                        p[mid] - p[i] <= d) { res = mid; lo = mid + 1; }
+                    if ((long) p[mid] - p[i] <= d) {
+                        res = mid; lo = mid + 1;
                     } else {
                         hi = mid - 1;
                     }
@@ -64,7 +64,7 @@ public class Supervision {
                 long dpI = (pow2[freeI] * ((wNoover + 1) % MOD) % MOD + pow2[prefCount[ri[i] + 1]] * wOver % MOD) % MOD;
                 ans = (ans + dpI) % MOD;
                 long wCont = dpI * inv2pow[prefCount[ri[i] + 1]] % MOD;
-                queue.addLast(new long[] {ri[i], wCont, dpI});
+                queue.addLast(new long[]{ri[i], wCont, dpI});
                 wOver = (wOver + wCont) % MOD;
             }
         }
@@ -74,15 +74,15 @@ public class Supervision {
     }
 
     public static long pow(long base, long exp, long mod) {
-        long res = 1; 
+        long res = 1;
         base %= mod;
-        while (exp > 0) { 
+        while (exp > 0) {
             if ((exp & 1) == 1) {
-                res = res * base % mod; 
-                base = base * base % mod; 
-                exp >>= 1; 
+                res = res * base % mod;
             }
+            base = base * base % mod;
+            exp >>= 1;
+        }
         return res;
     }
-
 }
